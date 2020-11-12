@@ -12,10 +12,10 @@ var BuildTypes;
     BuildTypes["STAGING"] = "S";
     BuildTypes["PRODUCTION"] = "P";
 })(BuildTypes || (BuildTypes = {}));
-class SparkLogger {
+class ConsoleLogger {
     constructor(_bType) {
         this.setting = {
-            ENV: SparkLogger._buildTypes.DEVELOPMENT
+            ENV: ConsoleLogger._buildTypes.DEVELOPMENT
         };
         this.colors = {
             Reset: "\x1b[0m",
@@ -80,5 +80,5 @@ class SparkLogger {
         }
     }
 }
-SparkLogger._buildTypes = BuildTypes;
-module.exports = SparkLogger;
+ConsoleLogger._buildTypes = BuildTypes;
+module.exports = ConsoleLogger;

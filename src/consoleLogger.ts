@@ -1,5 +1,5 @@
 
-interface SparkLoggerInterface {
+interface ConsoleLoggerInterface {
     info(fromFile: string, message: string, obj: any): void;
     error(fromFile: string, message: string, obj: any): void;
     warning(fromFile: string, message: string, obj: any): void;
@@ -20,12 +20,12 @@ enum BuildTypes {
     PRODUCTION = "P"
 }
 
-class SparkLogger implements SparkLoggerInterface {
+class ConsoleLogger implements ConsoleLoggerInterface {
 
     public static _buildTypes = BuildTypes;
 
     private setting = {
-        ENV: SparkLogger._buildTypes.DEVELOPMENT
+        ENV: ConsoleLogger._buildTypes.DEVELOPMENT
     }
 
     private colors: any = {
@@ -104,4 +104,4 @@ class SparkLogger implements SparkLoggerInterface {
 }
 
 
-export = SparkLogger;
+export = ConsoleLogger;
