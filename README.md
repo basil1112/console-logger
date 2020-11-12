@@ -9,8 +9,8 @@ Trying to build custom console log message using styling the font and colors in 
 
 
 # Usage
-   `const sparkLogger = require('./sparkLogger');
+     const sparkLogger = require('./sparkLogger');
 
-   const instanceLog = new sparkLogger(sparkLogger._buildTypes.DEVELOPMENT);
+     const instanceLog = new sparkLogger(sparkLogger._buildTypes.DEVELOPMENT);
 
-   instanceLog.info('test.js','HAPPY');`
+     instanceLog.info('test.js','HAPPY');
