@@ -1,6 +1,6 @@
 {
   "name": "console-logger-dev",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "dist/index.js",
   "types": "dist",
@@ -8,6 +8,10 @@
     "start": "node dist/consoleLogger.js",
     "dev" : "nodemon src/consoleLogger.ts",
     "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chalk/strip-ansi.git"
   },
   "author": "Basil1112",
   "license": "ISC",
