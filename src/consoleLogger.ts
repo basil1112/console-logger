@@ -14,13 +14,13 @@ enum LogType {
     DEBUG = 'debug',
 }
 
-enum BuildTypes {
+export enum BuildTypes {
     DEVELOPMENT = "D",
     STAGING = "S",
     PRODUCTION = "P"
 }
 
-class ConsoleLogger implements ConsoleLoggerInterface {
+export class ConsoleLogger implements ConsoleLoggerInterface {
 
     public static _buildTypes = BuildTypes;
 
@@ -61,7 +61,7 @@ class ConsoleLogger implements ConsoleLoggerInterface {
     };
 
     constructor(_bType?: BuildTypes) {
-        this.setting.ENV = typeof _bType != 'undefined' ? _bType : BuildTypes.PRODUCTION;
+        this.setting.ENV = typeof _bType != 'undefined' ? _bType : BuildTypes.DEVELOPMENT;
     }
 
 
@@ -104,4 +104,3 @@ class ConsoleLogger implements ConsoleLoggerInterface {
 }
 
 
-export = ConsoleLogger;

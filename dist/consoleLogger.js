@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConsoleLogger = exports.BuildTypes = void 0;
 var LogType;
 (function (LogType) {
     LogType["ERROR"] = "error";
@@ -11,9 +13,9 @@ var BuildTypes;
     BuildTypes["DEVELOPMENT"] = "D";
     BuildTypes["STAGING"] = "S";
     BuildTypes["PRODUCTION"] = "P";
-})(BuildTypes || (BuildTypes = {}));
-class ConsoleLogger {
-    constructor(_bType) {
+})(BuildTypes = exports.BuildTypes || (exports.BuildTypes = {}));
+var ConsoleLogger = /** @class */ (function () {
+    function ConsoleLogger(_bType) {
         this.setting = {
             ENV: ConsoleLogger._buildTypes.DEVELOPMENT
         };
@@ -48,37 +50,39 @@ class ConsoleLogger {
                 Crimson: "\x1b[48m"
             }
         };
-        this.setting.ENV = typeof _bType != 'undefined' ? _bType : BuildTypes.PRODUCTION;
+        this.setting.ENV = typeof _bType != 'undefined' ? _bType : BuildTypes.DEVELOPMENT;
     }
-    info(fromFile, message, obj) {
+    ConsoleLogger.prototype.info = function (fromFile, message, obj) {
         this.spark_log(LogType.INFO, fromFile, message, obj);
-    }
-    error(fromFile, message, obj) {
+    };
+    ConsoleLogger.prototype.error = function (fromFile, message, obj) {
         this.spark_log(LogType.ERROR, fromFile, message, obj);
-    }
-    warning(fromFile, message, obj) {
+    };
+    ConsoleLogger.prototype.warning = function (fromFile, message, obj) {
         this.spark_log(LogType.WARNING, fromFile, message, obj);
-    }
-    debug(fromFile, message, obj) {
+    };
+    ConsoleLogger.prototype.debug = function (fromFile, message, obj) {
         this.spark_log(LogType.DEBUG, fromFile, message, obj);
-    }
-    spark_log(w, x, y, z) {
+    };
+    ConsoleLogger.prototype.spark_log = function (w, x, y, z) {
         switch (w) {
             case LogType.INFO:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Cyan, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Cyan, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
+                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Cyan, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Cyan, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", this.colors.Reset)) : null;
                 break;
             case LogType.ERROR:
                 console.log(this.colors.bg.White, this.colors.fg.Red, 'ERROR', this.colors.Reset);
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Red, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Red, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
+                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Red, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Red, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", this.colors.Reset)) : null;
                 break;
             case LogType.WARNING:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Yellow, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Yellow, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
+                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Yellow, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Yellow, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", this.colors.Reset)) : null;
                 break;
             default:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.White, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.White, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
+                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.White, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.White, new Date().toISOString() + " | [" + w + "] | " + x + " | " + y + " | ", this.colors.Reset)) : null;
                 break;
         }
-    }
-}
-ConsoleLogger._buildTypes = BuildTypes;
-module.exports = ConsoleLogger;
+    };
+    ConsoleLogger._buildTypes = BuildTypes;
+    return ConsoleLogger;
+}());
+exports.ConsoleLogger = ConsoleLogger;
+//# sourceMappingURL=consoleLogger.js.map
