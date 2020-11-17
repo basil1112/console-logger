@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chalk/strip-ansi.git"
+    "url": "git+https://github.com/basil1112/console-logger.git"
   },
   "author": "Basil1112",
   "license": "ISC",
