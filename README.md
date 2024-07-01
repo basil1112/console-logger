@@ -1,39 +1,93 @@
-# console-logger
-# What is this ?
-console-logger-dev is a simple utility logger for typescript and javascript
+# Console Logger
 
-# Installation
-    npm i console-logger-dev
+## What is this?
 
+`console-logger-dev` is a simple utility logger for TypeScript and JavaScript. It provides different logging levels (info, error, warning, debug) and supports colored output. It also includes a singleton pattern for easy instantiation and use across your project.
 
+## Installation
+
+```bash
+npm install console-logger-dev
+```
 # Usage
-        const Logger = require('console-logger-dev')
-        var log = new Logger.ConsoleLogger(Logger.ConsoleLogger._buildTypes.DEVELOPMENT); // DEVELOPMENT,PRODUCTION
+## Importing and Initializing
+You can import the logger and create a singleton instance for your desired build environment `(DEVELOPMENT, STAGING, PRODUCTION)`. The build type determines the behavior of the logger, especially for production where logs are suppressed.
 
-        var anyObject = {
-            "firstname": "developer",
-            "application": "console modifier"
+```bash
+const { ConsoleLogger, BuildTypes } = require('console-logger-dev');
+
+// Create a console instance for the desired environment
+const console = ConsoleLogger.getInstance(BuildTypes.DEVELOPMENT);
+
+
+```
+
+## Logging Messages
+You can log messages at different levels. The logger automatically includes the calling file and function name in each log message.
+
+```bash
+const { ConsoleLogger, BuildTypes } = require('./dist/consoleLogger');
+
+// Create a console instance for the desired environment
+const console = ConsoleLogger.getInstance(BuildTypes.DEVELOPMENT);
+
+var anyObject = {
+    "glossary": {
+        "title": "example glossary",
+        "GlossDiv": {
+            "title": "S",
+            "GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+                    "SortAs": "SGML",
+                    "GlossTerm": "Standard Generalized Markup Language",
+                    "Acronym": "SGML",
+                    "Abbrev": "ISO 8879:1986",
+                    "GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+                        "GlossSeeAlso": ["GML", "XML"]
+                    },
+                    "GlossSee": "markup"
+                }
+            }
         }
+    }
+}
 
-        //log with objects passing 
-        log.info('From which page filename', "Message to print", anyObject); //log prints in blue color
+// Log some messages using the console instance
+console.info("Application started", anyObject); // log prints in cyan color
+console.info("No object to print only message"); // log prints in cyan color
 
-        //log without objects
-        log.info('From which page filename', "No object to print only message"); //log prints in blue color
+const normalFnc = (obj) => {
+    console.log("log message inside a function", anyObject);
+}
 
-        //log error message 
-        try {
-            throw new Error();
-        } catch (error) {
-            log.error('Filename.js',"Some Error Occured",error);
-        }
-
-        //log warning message
-        log.warning("Filename.js","This is a warning message",anyObject); // log prints in yellow color
-        log.warning("Filename.js","This is a warning message without object");
+function someFunction() {
+    // creating a error to show error message
+    try {
+        throw new Error("Some Error Occurred");
+    } catch (error) {
+        console.error("Some Error Occurred", error); // log prints in red color
+    }
 
 
-        //log Debug message
-        log.debug("Filename.js","This is a debug message",anyObject); // log prints in white color // normal 
-        log.debug("Filename.js","This is a debug message without object");
+}
 
+
+//calling the above function 
+someFunction();
+normalFnc();
+```
+
+
+
+# Features
+
+### Singleton Pattern:
+Ensures a single instance of the logger throughout the application.
+Colored Output: Different log levels are displayed in different colors for better readability.
+### Build Types: 
+Configurable build types (DEVELOPMENT, STAGING, PRODUCTION) to control logging behavior.
+Automatic Caller Info: Automatically includes the calling file and function name in log messages.
+### Pretty JSON Output:
+If an object is passed, it prints in a pretty JSON format.

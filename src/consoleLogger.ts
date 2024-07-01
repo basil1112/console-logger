@@ -1,17 +1,19 @@
+import * as path from 'path';
 
 interface ConsoleLoggerInterface {
-    info(fromFile: string, message: string, obj: any): void;
-    error(fromFile: string, message: string, obj: any): void;
-    warning(fromFile: string, message: string, obj: any): void;
-    debug(fromFile: string, message: string, obj: any): void;
+    info(message: string, obj?: any): void;
+    error(message: string, obj?: any): void;
+    warning(message: string, obj?: any): void;
+    debug(message: string, obj?: any): void;
+    log(message: string, obj?: any): void;
 }
-
 
 enum LogType {
     ERROR = 'error',
     WARNING = 'warning',
     INFO = 'info',
     DEBUG = 'debug',
+    LOG = 'log'
 }
 
 export enum BuildTypes {
@@ -23,6 +25,7 @@ export enum BuildTypes {
 export class ConsoleLogger implements ConsoleLoggerInterface {
 
     public static _buildTypes = BuildTypes;
+    private static instance: ConsoleLogger | null = null;
 
     private setting = {
         ENV: ConsoleLogger._buildTypes.DEVELOPMENT
@@ -60,47 +63,102 @@ export class ConsoleLogger implements ConsoleLoggerInterface {
         }
     };
 
-    constructor(_bType?: BuildTypes) {
-        this.setting.ENV = typeof _bType != 'undefined' ? _bType : BuildTypes.DEVELOPMENT;
+    private constructor(_bType: BuildTypes) {
+        this.setting.ENV = _bType;
     }
 
-
-    public info(fromFile: string, message: string, obj?: any) {
-    
-        this.spark_log(LogType.INFO, fromFile, message, obj)
+    public static getInstance(_bType: BuildTypes): ConsoleLogger {
+        if (!ConsoleLogger.instance || ConsoleLogger.instance.setting.ENV !== _bType) {
+            ConsoleLogger.instance = new ConsoleLogger(_bType);
+        }
+        return ConsoleLogger.instance;
     }
 
-    public error(fromFile: string, message: string, obj?: any) {
-        this.spark_log(LogType.ERROR, fromFile, message, obj)
-    }
-    public warning(fromFile: string, message: string, obj?: any) {
-        this.spark_log(LogType.WARNING, fromFile, message, obj)
-    }
-    public debug(fromFile: string, message: string, obj?: any) {
-        this.spark_log(LogType.DEBUG, fromFile, message, obj)
+    public info(message: string, obj?: any) {
+        this.logMessage(LogType.INFO, message, obj);
     }
 
-    private spark_log(w: LogType, x: string, y: string, z?: any) {
+    public error(message: string, obj?: any) {
+        this.logMessage(LogType.ERROR, message, obj);
+    }
 
-        switch (w) {
-            case LogType.INFO:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Cyan, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Cyan, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
-                break
-            case LogType.ERROR:
-                console.log(this.colors.bg.White, this.colors.fg.Red, 'ERROR', this.colors.Reset);
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Red, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Red, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
-                break;
-            case LogType.WARNING:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.Yellow, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.Yellow, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
-                break;
-            default:
-                this.setting.ENV == 'D' ? (typeof z != 'undefined' ? console.log(this.colors.bg.Black, this.colors.fg.White, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, z, this.colors.Reset) : console.log(this.colors.bg.Black, this.colors.fg.White, `${new Date().toISOString()} | [${w}] | ${x} | ${y} | `, this.colors.Reset)) : null;
-                break
+    public warning(message: string, obj?: any) {
+        this.logMessage(LogType.WARNING, message, obj);
+    }
+
+    public debug(message: string, obj?: any) {
+        this.logMessage(LogType.DEBUG, message, obj);
+    }
+
+    public log(message: string, obj?: any) {
+        this.logMessage(LogType.LOG, message, obj);
+    }
+
+    private logMessage(type: LogType, message: string, obj?: any) {
+        if (this.setting.ENV === BuildTypes.PRODUCTION && type !== LogType.ERROR) {
+            return;
         }
 
+        const timestamp = new Date().toISOString();
+        const color = this.getColor(type);
+        const reset = this.colors.Reset;
+        const { callerFile, callerFunction } = this.getCallerInfo();
+
+        const formattedMessage = `${timestamp} | [${type}] | ${callerFile} | ${callerFunction} | ${message} |`;
+
+        if (obj !== undefined) {
+            if (typeof obj === 'object') {
+                console.log(color, formattedMessage, JSON.stringify(obj, null, 2), reset);
+            } else {
+                console.log(color, formattedMessage, obj, reset);
+            }
+        } else {
+            console.log(color, formattedMessage, reset);
+        }
     }
 
+    private getColor(type: LogType): string {
+        switch (type) {
+            case LogType.ERROR:
+                return `${this.colors.bg.Black}${this.colors.fg.Red}`;
+            case LogType.WARNING:
+                return `${this.colors.bg.Black}${this.colors.fg.Yellow}`;
+            case LogType.INFO:
+                return `${this.colors.bg.Black}${this.colors.fg.Cyan}`;
+            case LogType.DEBUG:
+            case LogType.LOG:
+                return `${this.colors.bg.Black}${this.colors.fg.White}`;
+            default:
+                return `${this.colors.bg.Black}${this.colors.fg.White}`;
+        }
+    }
 
+    private getCallerInfo(): { callerFile: string, callerFunction: string } {
+        const originalFunc = Error.prepareStackTrace;
+
+        let callerFile: string | undefined = 'unknown';
+        let callerFunction: string | undefined = 'unknown';
+        try {
+            const err = new Error();
+            Error.prepareStackTrace = (err, stack) => stack;
+            const stack = err.stack as unknown as NodeJS.CallSite[];
+            const currentFile = stack.shift()?.getFileName();
+
+            while (stack.length) {
+                const stackFrame = stack.shift();
+                if (stackFrame) {
+                    callerFile = stackFrame.getFileName() || 'unknown';
+                    callerFunction = stackFrame.getFunctionName() || '-';
+                    if (currentFile !== callerFile) break;
+                }
+            }
+        } catch (err) {
+            callerFile = 'unknown';
+            callerFunction = 'unknown';
+        }
+
+        Error.prepareStackTrace = originalFunc;
+
+        return { callerFile: path.basename(callerFile || 'unknown'), callerFunction };
+    }
 }
-
-
