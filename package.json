@@ -1,25 +1,28 @@
 {
   "name": "console-logger-dev",
-  "version": "1.1.0",
+  "version": "1.1.10",
   "description": "A simple console logger for development purposes",
   "main": "dist/index.js",
   "types": "dist",
   "scripts": {
-    "start": "node dist/consoleLogger.js",
-    "dev": "nodemon src/consoleLogger.ts",
-    "build": "tsc -p ."
+    "build": "tsc"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/basil1112/console-logger.git"
   },
   "author": "Basil1112",
   "license": "ISC",
+  "dependencies": {
+    "path-browserify": "^1.0.1"
+  },
   "devDependencies": {
     "@types/node": "^14.18.63",
-    "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.3.5"
   },
   "keywords": ["logger", "development", "console"],
   "engines": {
