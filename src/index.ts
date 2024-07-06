@@ -1,5 +1,5 @@
 import { BrowserConsoleLogger } from './browserConsoleLogger';
-import { LogType, ConsoleLoggerInterface } from './consoleLogger';
+import { LogType, ConsoleLoggerInterface, BrowserConsoleLoggerInterface } from './consoleLogger';
 
 export enum BuildTypes {
     DEVELOPMENT = 'development',
@@ -12,16 +12,19 @@ export enum EnvironmentTypes {
 }
 
 let logger: ConsoleLoggerInterface;
+let browserLogger: BrowserConsoleLoggerInterface;
 
-export function createLogger(environment: EnvironmentTypes = EnvironmentTypes.NODE, buildType: BuildTypes = BuildTypes.DEVELOPMENT): ConsoleLoggerInterface {
+
+export function createLogger(environment: EnvironmentTypes = EnvironmentTypes.NODE, buildType: BuildTypes = BuildTypes.DEVELOPMENT): ConsoleLoggerInterface | BrowserConsoleLoggerInterface {
     if (environment === EnvironmentTypes.NODE) {
         // Dynamically import the NodeConsoleLogger only if in Node environment
         const NodeConsoleLogger = require('./nodeConsoleLogger').NodeConsoleLogger;
         logger = NodeConsoleLogger.getInstance(buildType);
+        return logger;
     } else if (environment === EnvironmentTypes.BROWSER) {
-        logger = BrowserConsoleLogger.getInstance(buildType);
+        browserLogger = BrowserConsoleLogger.getInstance(buildType);
+        return browserLogger
     } else {
         throw new Error(`Unsupported environment type: ${environment}`);
     }
-    return logger;
 }

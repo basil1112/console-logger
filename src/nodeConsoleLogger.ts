@@ -125,7 +125,8 @@ export class NodeConsoleLogger implements ConsoleLoggerInterface {
         let logSuffix = '';
 
         if (obj !== undefined) {
-            logSuffix = JSON.stringify(obj, null, 2);
+            //logSuffix = JSON.stringify(obj, null, 2);
+            logSuffix = JSON.stringify(obj, null, 2).split('\n').map(line => `${colors.bg.Black}${colors.fg.Cyan}${line}${colors.Reset}`).join('\n');
         }
 
         switch (logType) {

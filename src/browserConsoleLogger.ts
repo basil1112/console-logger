@@ -1,4 +1,4 @@
-import { ConsoleLoggerInterface, LogType } from './consoleLogger';
+import { BrowserConsoleLoggerInterface, LogType } from './consoleLogger';
 import { BuildTypes } from './index';
 
 const colors: any = {
@@ -33,7 +33,7 @@ const colors: any = {
     }
 };
 
-export class BrowserConsoleLogger implements ConsoleLoggerInterface {
+export class BrowserConsoleLogger implements BrowserConsoleLoggerInterface {
     private static instance: BrowserConsoleLogger;
     private env: BuildTypes;
 
@@ -48,60 +48,95 @@ export class BrowserConsoleLogger implements ConsoleLoggerInterface {
         return BrowserConsoleLogger.instance;
     }
 
-    public error(message: string, obj?: any) {
-        this.logMessage(LogType.ERROR, message, obj);
+    public error(message: string, obj?: any): void;
+    public error(linenumber: string, filename: string, message: string, obj?: any): void;
+    public error(param1: string, param2?: string, param3?: any, param4?: any) {
+        if (typeof param2 === 'string') {
+            this.logMessage(LogType.ERROR, param3, param4, param1, param2);
+        } else {
+            this.logMessage(LogType.ERROR, param1, param2);
+        }
     }
 
-    public warn(message: string, obj?: any) {
-        this.logMessage(LogType.WARNING, message, obj);
+    public warn(message: string, obj?: any): void;
+    public warn(linenumber: string, filename: string, message: string, obj?: any): void;
+    public warn(param1: string, param2?: string, param3?: any, param4?: any) {
+        if (typeof param2 === 'string') {
+            this.logMessage(LogType.WARNING, param3, param4, param1, param2);
+        } else {
+            this.logMessage(LogType.WARNING, param1, param2);
+        }
     }
 
-    public info(message: string, obj?: any) {
-        this.logMessage(LogType.INFO, message, obj);
+    public info(message: string, obj?: any): void;
+    public info(linenumber: string, filename: string, message: string, obj?: any): void;
+    public info(param1: string, param2?: string, param3?: any, param4?: any) {
+        if (typeof param2 === 'string') {
+            this.logMessage(LogType.INFO, param3, param4, param1, param2);
+        } else {
+            this.logMessage(LogType.INFO, param1, param2);
+        }
     }
 
-    public debug(message: string, obj?: any) {
-        this.logMessage(LogType.DEBUG, message, obj);
+    public debug(message: string, obj?: any): void;
+    public debug(linenumber: string, filename: string, message: string, obj?: any): void;
+    public debug(param1: string, param2?: string, param3?: any, param4?: any) {
+        if (typeof param2 === 'string') {
+            this.logMessage(LogType.DEBUG, param3, param4, param1, param2);
+        } else {
+            this.logMessage(LogType.DEBUG, param1, param2);
+        }
     }
 
-    public log(message: string, obj?: any) {
-        this.logMessage(LogType.LOG, message, obj);
+    public log(message: string, obj?: any): void;
+    public log(linenumber: string, filename: string, message: string, obj?: any): void;
+    public log(param1: string, param2?: string, param3?: any, param4?: any) {
+        if (typeof param2 === 'string') {
+            this.logMessage(LogType.LOG, param3, param4, param1, param2);
+        } else {
+            this.logMessage(LogType.LOG, param1, param2);
+        }
     }
 
-    private logMessage(logType: LogType, message: string, obj?: any) {
+    private logMessage(logType: LogType, message: string, obj?: any, linenumber?: string, filename?: string) {
         if (this.env === BuildTypes.PRODUCTION) return;
 
-        let logSuffix = '';
         let color = colors.Reset;
 
-        if (obj !== undefined) {
-            logSuffix = JSON.stringify(obj, null, 2);
+        let callerInfo = '';
+        if (linenumber && filename) {
+            callerInfo = `Line:${linenumber} ${filename}`;
         }
+
+        const errorTemp = new Error();
+        const stackLines = errorTemp.stack?.split('\n');
+        console.log("MY STACK ****", stackLines);
+
 
         switch (logType) {
             case LogType.INFO:
                 color = `${colors.bg.Black};${colors.fg.Cyan}`;
-                console.info(`%c${message}`, color, logSuffix);
+                console.info(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.ERROR:
                 color = `${colors.bg.Black};${colors.fg.Red}`;
-                console.error(`%c${message}`, color, logSuffix);
+                console.error(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.WARNING:
                 color = `${colors.bg.Black};${colors.fg.Yellow}`;
-                console.warn(`%c${message}`, color, logSuffix);
+                console.warn(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.DEBUG:
                 color = `${colors.bg.Black};${colors.fg.White}`;
-                console.debug(`%c${message}`, color, logSuffix);
+                console.debug(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.LOG:
                 color = `${colors.bg.Black};${colors.fg.White}`;
-                console.log(`%c${message}`, color, logSuffix);
+                console.log(`%c${callerInfo} ${message}`, color, obj);
                 break;
             default:
                 color = `${colors.bg.Black};${colors.fg.White}`;
-                console.log(`%c${message}`, color, logSuffix);
+                console.log(`%c${callerInfo} ${message}`, color, obj);
                 break;
         }
     }

@@ -29,9 +29,9 @@ var anyObject = {
 
 // Log some messages using the console instance
 console.info("Application started", anyObject); // Log prints in cyan color
-console.warn("Application started", anyObject); 
-console.info("No object to print only message"); // Log prints in cyan color
-console.log("Normal Message", anyObject); // Log prints in white color
+
+
+
 
 function someFunction() {
     // Log error message 
