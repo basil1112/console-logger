@@ -9,28 +9,33 @@ const colors: any = {
     Blink: "text-decoration: blink",
     Reverse: "filter: invert(1)",
     Hidden: "visibility: hidden",
-    fg: {
-        Black: "color: black",
-        Red: "color: red",
-        Green: "color: green",
-        Yellow: "color: yellow",
-        Blue: "color: blue",
-        Magenta: "color: magenta",
-        Cyan: "color: cyan",
-        White: "color: white",
-        Crimson: "color: crimson"
+
+    "fg": {
+        "Black": "color: black",
+        "Red": "color: red",
+        "Green": "color: green",
+        "Yellow": "color: yellow",
+        "Blue": "color: blue",
+        "Magenta": "color: magenta",
+        "Cyan": "color: cyan",
+        "White": "color: white",
+        "Crimson": "color: crimson",
+        "Nero": "color: #212121"
     },
-    bg: {
-        Black: "background: black",
-        Red: "background: red",
-        Green: "background: green",
-        Yellow: "background: yellow",
-        Blue: "background: blue",
-        Magenta: "background: magenta",
-        Cyan: "background: cyan",
-        White: "background: white",
-        Crimson: "background: crimson"
+    "bg": {
+        "Black": "background: black",
+        "Red": "background: red",
+        "Green": "background: green",
+        "Yellow": "background: yellow",
+        "Blue": "background: blue",
+        "Magenta": "background: magenta",
+        "Cyan": "background: cyan",
+        "White": "background: white",
+        "Crimson": "background: crimson",
+        "Nero": "background: #212121"
     }
+
+
 };
 
 export class BrowserConsoleLogger implements BrowserConsoleLoggerInterface {
@@ -110,32 +115,30 @@ export class BrowserConsoleLogger implements BrowserConsoleLoggerInterface {
 
         const errorTemp = new Error();
         const stackLines = errorTemp.stack?.split('\n');
-        console.log("MY STACK ****", stackLines);
-
 
         switch (logType) {
             case LogType.INFO:
-                color = `${colors.bg.Black};${colors.fg.Cyan}`;
+                color = `${colors.bg.Nero};${colors.fg.Cyan}`;
                 console.info(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.ERROR:
-                color = `${colors.bg.Black};${colors.fg.Red}`;
+                color = `${colors.bg.Nero};${colors.fg.Red}`;
                 console.error(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.WARNING:
-                color = `${colors.bg.Black};${colors.fg.Yellow}`;
+                color = `${colors.bg.Nero};${colors.fg.Yellow}`;
                 console.warn(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.DEBUG:
-                color = `${colors.bg.Black};${colors.fg.White}`;
+                color = `${colors.bg.Nero};${colors.fg.White}`;
                 console.debug(`%c${callerInfo} ${message}`, color, obj);
                 break;
             case LogType.LOG:
-                color = `${colors.bg.Black};${colors.fg.White}`;
+                color = `${colors.bg.Nero};${colors.fg.White}`;
                 console.log(`%c${callerInfo} ${message}`, color, obj);
                 break;
             default:
-                color = `${colors.bg.Black};${colors.fg.White}`;
+                color = `${colors.bg.Nero};${colors.fg.White}`;
                 console.log(`%c${callerInfo} ${message}`, color, obj);
                 break;
         }

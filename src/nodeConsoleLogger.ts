@@ -1,8 +1,5 @@
-// nodeConsoleLogger.ts
-
 import { ConsoleLoggerInterface, LogType } from './consoleLogger';
 import { BuildTypes, EnvironmentTypes } from './index';
-//import path from 'path';
 
 const colors: any = {
     Reset: "\x1b[0m",
@@ -21,7 +18,8 @@ const colors: any = {
         Magenta: "\x1b[35m",
         Cyan: "\x1b[36m",
         White: "\x1b[37m",
-        Crimson: "\x1b[38m"
+        Crimson: "\x1b[38m",
+        Nero: "\x1b[30m"
     },
     bg: {
         Black: "\x1b[40m",
@@ -32,10 +30,10 @@ const colors: any = {
         Magenta: "\x1b[45m",
         Cyan: "\x1b[46m",
         White: "\x1b[47m",
-        Crimson: "\x1b[48m"
+        Crimson: "\x1b[48m",
+         Nero: "\x1b[30m"
     }
 };
-
 
 interface LoggerSettings {
     ENV: BuildTypes;
@@ -43,7 +41,6 @@ interface LoggerSettings {
 }
 
 let path: any;
-
 
 export class NodeConsoleLogger implements ConsoleLoggerInterface {
     private static instance: NodeConsoleLogger;
@@ -99,7 +96,7 @@ export class NodeConsoleLogger implements ConsoleLoggerInterface {
         if (this.setting.ENV_TYPE === EnvironmentTypes.NODE) {
             const stack = new Error().stack;
             const callerInfo = this.getCallerInfo(stack);
-            const logPrefix = `${this.getFormattedDate()} | [${logType}] | ${callerInfo.file} | ${callerInfo.function} | ${message}`;
+            const logPrefix = `\n[${logType}]|Timestamp :${this.getFormattedDate()}|File: ${callerInfo.file} |\n Fnc: ${callerInfo.function} | ${message}`;
             this.logToNode(logType, logPrefix, obj);
         } else {
             this.logToBrowser(logType, message, obj);
@@ -122,34 +119,41 @@ export class NodeConsoleLogger implements ConsoleLoggerInterface {
     }
 
     private logToNode(logType: LogType, message: string, obj?: any) {
-        let logSuffix = '';
-
-        if (obj !== undefined) {
-            //logSuffix = JSON.stringify(obj, null, 2);
-            logSuffix = JSON.stringify(obj, null, 2).split('\n').map(line => `${colors.bg.Black}${colors.fg.Cyan}${line}${colors.Reset}`).join('\n');
-        }
+        let color = `${colors.bg.Black}${colors.fg.White}`;
+        let logFunction = console.log;
 
         switch (logType) {
             case LogType.INFO:
-                console.log(colors.bg.Black, colors.fg.Cyan, `${message}`, colors.Reset, logSuffix);
+                color = `${colors.bg.Nero}${colors.fg.Cyan}`;
+                logFunction = console.info;
                 break;
             case LogType.ERROR:
-                console.error(colors.bg.Black, colors.fg.Red, 'ERROR', colors.Reset);
-                console.error(colors.bg.Black, colors.fg.Red, `${message}`, colors.Reset, logSuffix);
+                color = `${colors.bg.Nero}${colors.fg.Red}`;
+                logFunction = console.error;
                 break;
             case LogType.WARNING:
-                console.warn(colors.bg.Black, colors.fg.Yellow, `${message}`, colors.Reset, logSuffix);
+                color = `${colors.bg.Nero}${colors.fg.Yellow}`;
+                logFunction = console.warn;
                 break;
             case LogType.DEBUG:
-                console.log(colors.bg.Black, colors.fg.White, `${message}`, colors.Reset, logSuffix);
+                color = `${colors.bg.Nero}${colors.fg.White}`;
+                logFunction = console.debug;
                 break;
             case LogType.LOG:
-                console.log(colors.bg.Black, colors.fg.White, `${message}`, colors.Reset, logSuffix);
-                break;
-            default:
-                console.log(colors.bg.Black, colors.fg.White, `${message}`, colors.Reset, logSuffix);
+                color = `${colors.bg.Nero}${colors.fg.White}`;
+                logFunction = console.log;
                 break;
         }
+
+        let logSuffix = '';
+        if (obj !== undefined) {
+            logSuffix = JSON.stringify(obj, null, 2)
+                .split('\n')
+                .map(line => `${color}${line}${colors.Reset}`)
+                .join('\n');
+        }
+
+        logFunction(`${color}${message}${colors.Reset}`, logSuffix);
     }
 
     private logToBrowser(logType: LogType, message: string, obj?: any) {

@@ -1,7 +1,7 @@
 {
   "name": "console-logger-dev",
   "version": "1.1.25",
-  "description": "A simple console logger for development purposes",
+  "description": "A versatile logger for Node.js and browser environments with multiple log levels.Simple for development ",
   "main": "dist/index.js",
   "types": "dist",
   "scripts": {
@@ -24,7 +24,28 @@
     "ts-node": "^9.0.0",
     "typescript": "^4.3.5"
   },
-  "keywords": ["logger", "development", "console"],
+  "keywords": [
+    "logger",
+    "console",
+    "logging",
+    "node",
+    "browser",
+    "React",
+    "console logger",
+    "log levels",
+    "error handling",
+    "development tools",
+    "debugging",
+    "console log",
+    "Node.js",
+    "frontend",
+    "backend",
+    "production",
+    "environment",
+    "colored logs",
+    "log management",
+    "logging utility"
+  ],
   "engines": {
     "node": ">=12.0.0"
   }

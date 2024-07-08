@@ -1,93 +1,134 @@
-# Console Logger
+# Node Console Logger
 
-## What is this?
-
-`console-logger-dev` is a simple utility logger for TypeScript and JavaScript. It provides different logging levels (info, error, warning, debug) and supports colored output. It also includes a singleton pattern for easy instantiation and use across your project.
+A simple and flexible console logger for both Node.js and browser environments, providing different levels of logging with colored outputs.
 
 ## Installation
 
+To install the package, use the following npm command:
+
 ```bash
-npm install console-logger-dev
+npm install node-console-logger
 ```
-# Usage
-## Importing and Initializing
-You can import the logger and create a singleton instance for your desired build environment `(DEVELOPMENT, STAGING, PRODUCTION)`. The build type determines the behavior of the logger, especially for production where logs are suppressed.
+## Usage
+#### Creating Logger Instances
+You can create logger instances for both Node.js and React (browser) environments using the createLogger function
+##### Node.js Environment
 
-```bash
-const { ConsoleLogger, BuildTypes } = require('console-logger-dev');
-
-// Create a console instance for the desired environment
-const console = ConsoleLogger.getInstance(BuildTypes.DEVELOPMENT);
-
+To create a logger instance for the Node.js environment, use the following code:
 
 ```
+import { createLogger, EnvironmentTypes, BuildTypes } from 'node-console-logger';
+const nodeLogger = createLogger(EnvironmentTypes.NODE, BuildTypes.DEVELOPMENT);
+```
 
-## Logging Messages
-You can log messages at different levels. The logger automatically includes the calling file and function name in each log message.
+##### React (Browser) Environment
 
-```bash
-const { ConsoleLogger, BuildTypes } = require('./dist/consoleLogger');
+To create a logger instance for the React (browser) environment, use the following code:
 
-// Create a console instance for the desired environment
-const console = ConsoleLogger.getInstance(BuildTypes.DEVELOPMENT);
+```
+import React, { useEffect } from 'react';
+import { createLogger, EnvironmentTypes, BuildTypes } from 'node-console-logger';
 
-var anyObject = {
-    "glossary": {
-        "title": "example glossary",
-        "GlossDiv": {
-            "title": "S",
-            "GlossList": {
-                "GlossEntry": {
-                    "ID": "SGML",
-                    "SortAs": "SGML",
-                    "GlossTerm": "Standard Generalized Markup Language",
-                    "Acronym": "SGML",
-                    "Abbrev": "ISO 8879:1986",
-                    "GlossDef": {
-                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
-                        "GlossSeeAlso": ["GML", "XML"]
-                    },
-                    "GlossSee": "markup"
-                }
-            }
-        }
+const App = () => {
+    const browserLogger = createLogger(EnvironmentTypes.BROWSER, BuildTypes.DEVELOPMENT);
+
+    useEffect(() => {
+    //two parameter message and obj to print if any
+        browserLogger.warn('Warning message', { warning: 'Be careful' });
+        
+        //here we are passing multiple params,line number, filename,message, object 
+        
+        browserLogger.warn('App.js', 61, 'Warning message', { warning: 'Be careful' });
+        browserLogger.info('App.js', 62, 'Info message', { info: 'Just so you know' });
+        browserLogger.debug('App.js', 63, 'Debug message', { debug: 'Debugging info' });
+        browserLogger.log('App.js', 64, 'Log message', { log: 'General log info' });
+    }, []);
+
+    return (
+        <div>
+            <h1>Check the console for log messages</h1>
+        </div>
+    );
+};
+
+export default App;
+
+
+```
+
+#### browser usage two types 
+
+with two parameter
+
+```
+browserLogger.warn('Warning message', { warning: 'Be careful' });
+```
+
+with four parameter 
+```
+ browserLogger.warn(61,'App.js', 'Warning message', { warning: 'Be careful' });
+```
+
+Certainly! As a developer, passing all parameters manually can be awkward. That's why I've created a code snippet autofill for VSCode editor integration. Front end developers You can find it below:
+
+
+### Log Levels
+The logger provides different levels of logging, each with its corresponding method:
+
+1. error: Logs error messages.
+2. error: Logs error messages.
+3. warn: Logs warning messages
+4. info: Logs informational messages.
+5. debug: Logs debugging messages.
+6. log: Logs general messages.
+
+
+### Build Types
+There are two build types supported by the logger:
+
+* DEVELOPMENT: For development environment. Logs will be printed.
+* PRODUCTION: For production environment. No logs will be printed.
+
+
+## Images
+
+![sample image in node terminal](/image/Screenshot 2024-07-08 173016.png "This is a sample image.")
+
+## VS Code Snippets [react developers]
+
+For ease of use, you can configure VS Code snippets for quick integration. Follow the steps below:
+
+1.Press `Ctrl + Shift + P` in `VS Code
+
+2. Type `Configure User Snippets` and select `javascript.json`
+3. Copy and paste the following JSON into the file:
+
+```
+{
+    "Import Logger": {
+        "prefix": "ilog",
+        "body": [
+            "import { createLogger, BuildTypes, EnvironmentTypes } from 'node-console-logger';"
+        ],
+        "description": "Import statement from node-console-logger"
+    },
+    "Console Log with Details": {
+        "prefix": "clog",
+        "body": [
+            "console.log('${TM_FILENAME}', ${TM_LINE_NUMBER}, '${1:message}', ${2:obj});"
+        ],
+        "description": "Print filename, line number, message, and object in console log"
     }
 }
-
-// Log some messages using the console instance
-console.info("Application started", anyObject); // log prints in cyan color
-console.info("No object to print only message"); // log prints in cyan color
-
-const normalFnc = (obj) => {
-    console.log("log message inside a function", anyObject);
-}
-
-function someFunction() {
-    // creating a error to show error message
-    try {
-        throw new Error("Some Error Occurred");
-    } catch (error) {
-        console.error("Some Error Occurred", error); // log prints in red color
-    }
-
-
-}
-
-
-//calling the above function 
-someFunction();
-normalFnc();
 ```
 
+after adding the snippet json, come to your js file and type 
+`ilog` for import statement 
+and `clog` for autofilling the filename and line number your are in :) 
 
 
-# Features
+### License
+This project is licensed under the MIT License
 
-### Singleton Pattern:
-Ensures a single instance of the logger throughout the application.
-Colored Output: Different log levels are displayed in different colors for better readability.
-### Build Types: 
-Configurable build types (DEVELOPMENT, STAGING, PRODUCTION) to control logging behavior.
-Automatic Caller Info: Automatically includes the calling file and function name in log messages.
-### Pretty JSON Output:
-If an object is passed, it prints in a pretty JSON format.
+
+
