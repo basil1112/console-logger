@@ -7,7 +7,7 @@ A simple and flexible console logger for both Node.js and browser environments, 
 To install the package, use the following npm command:
 
 ```bash
-npm install node-console-logger
+npm install console-logger-dev
 ```
 ## Usage
 #### Creating Logger Instances

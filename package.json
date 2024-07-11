@@ -1,6 +1,6 @@
 {
   "name": "console-logger-dev",
-  "version": "1.1.25",
+  "version": "1.2.1",
   "description": "A versatile logger for Node.js and browser environments with multiple log levels.Simple for development ",
   "main": "dist/index.js",
   "types": "dist",
@@ -17,6 +17,7 @@
   "author": "Basil1112",
   "license": "ISC",
   "dependencies": {
+    "console-logger-dev": "^1.2.0",
     "path-browserify": "^1.0.1"
   },
   "devDependencies": {
